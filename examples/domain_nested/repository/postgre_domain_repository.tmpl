@@ -1,0 +1,46 @@
+package repository
+
+import (
+	"fmt"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
+	"{{.ModuleName}}/app/{{.LowerDomainName}}/model"
+)
+
+type {{.PascalDomainName}}Repository interface {
+	Insert{{.PascalDomainName}}Row(c *fiber.Ctx, r model.{{.PascalDomainName}}) error
+}
+
+type {{.LowerDomainName}}RepositoryImpl struct {
+	database *pgxpool.Pool
+}
+
+var _ {{.PascalDomainName}}Repository = (*{{.LowerDomainName}}RepositoryImpl)(nil)
+
+func New(p *pgxpool.Pool) *{{.LowerDomainName}}RepositoryImpl {
+	return &{{.LowerDomainName}}RepositoryImpl{database: p}
+}
+
+func (u *{{.LowerDomainName}}RepositoryImpl) Insert{{.PascalDomainName}}Row(c *fiber.Ctx, r model.{{.PascalDomainName}}) error {
+
+	query := `
+		insert into {{.LowerDomainName}}s (id, name, content)
+		values (@id, @name, @content)
+	`
+
+	{{.LowerDomainName}}Args := pgx.NamedArgs{
+		"id":      r.Id,
+		"name":    r.Name,
+		"content": r.Content,
+	}
+
+	_, err := u.database.Exec(c.Context(), query, {{.LowerDomainName}}Args)
+
+	if err != nil {
+		return fmt.Errorf("Error database.Exec(): %v", err)
+	}
+
+	return nil
+}

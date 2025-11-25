@@ -1,0 +1,58 @@
+package service
+
+import (
+	"fmt"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
+	"{{.ModuleName}}/app/{{.LowerDomainName}}/handler/http/dto"
+	"{{.ModuleName}}/app/{{.LowerDomainName}}/model"
+	"{{.ModuleName}}/app/{{.LowerDomainName}}/repository"
+)
+
+type {{.PascalDomainName}}Service interface {
+	Create{{.PascalDomainName}}(c *fiber.Ctx, {{.LowerDomainName}} dto.RequestCreate{{.PascalDomainName}}) (model.{{.PascalDomainName}}, error)
+	Query{{.PascalDomainName}}List() ([]dto.ResponseCreate{{.PascalDomainName}}, error)
+}
+
+type {{.LowerDomainName}}ServiceImpl struct {
+	{{.LowerDomainName}}Repository repository.{{.PascalDomainName}}Repository
+}
+
+var _ {{.PascalDomainName}}Service = (*{{.LowerDomainName}}ServiceImpl)(nil)
+
+func New(u repository.{{.PascalDomainName}}Repository) *{{.LowerDomainName}}ServiceImpl {
+	return &{{.LowerDomainName}}ServiceImpl{
+		{{.LowerDomainName}}Repository: u,
+	}
+}
+
+func (u *{{.LowerDomainName}}ServiceImpl) Create{{.PascalDomainName}}(c *fiber.Ctx, {{.LowerDomainName}} dto.RequestCreate{{.PascalDomainName}}) (model.{{.PascalDomainName}}, error) {
+	id, err := uuid.NewV7()
+
+	if err != nil {
+		return model.{{.PascalDomainName}}{}, err
+	}
+
+	new{{.PascalDomainName}} := model.{{.PascalDomainName}}{
+		Id:      id,
+		Name:    {{.LowerDomainName}}.Name,
+		Content: {{.LowerDomainName}}.Content,
+	}
+
+	err = u.{{.LowerDomainName}}Repository.Insert{{.PascalDomainName}}Row(c, new{{.PascalDomainName}})
+
+	return new{{.PascalDomainName}}, fmt.Errorf("Error {{.LowerDomainName}}Repository.Insert{{.PascalDomainName}}Row(): %v", err)
+}
+
+func (p *{{.LowerDomainName}}ServiceImpl) Query{{.PascalDomainName}}List() ([]dto.ResponseCreate{{.PascalDomainName}}, error) {
+	var {{.LowerDomainName}}List []dto.ResponseCreate{{.PascalDomainName}}
+
+	{{.LowerDomainName}}List = append({{.LowerDomainName}}List, dto.ResponseCreate{{.PascalDomainName}}{
+		Id:      "Hello",
+		Name:    "World",
+		Content: "!!!",
+	})
+
+	return {{.LowerDomainName}}List, nil
+}

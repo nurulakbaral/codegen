@@ -1,0 +1,12 @@
+package dto
+
+type RequestCreate{{.PascalDomainName}} struct {
+	Name    string `json:"name"`
+	Content string `json:"content"`
+}
+
+type ResponseCreate{{.PascalDomainName}} struct {
+	Id      string `json:"id"`
+	Name    string `json:"name"`
+	Content string `json:"content"`
+}

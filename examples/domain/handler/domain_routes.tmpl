@@ -1,0 +1,11 @@
+package http
+
+import (
+	"github.com/gofiber/fiber/v2"
+)
+
+func Routes(r *fiber.App, h {{.PascalDomainName}}Handler) {
+	{{.LowerDomainName}} := r.Group("/api/v1/{{.LowerDomainName}}")
+
+	{{.LowerDomainName}}.Get("/commodity", h.Get{{.PascalDomainName}}List)
+}

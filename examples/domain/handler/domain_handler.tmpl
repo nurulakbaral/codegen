@@ -1,0 +1,33 @@
+package http
+
+import (
+	"github.com/gofiber/fiber/v2"
+	"{{.ModuleName}}/app/{{.LowerDomainName}}/service"
+)
+
+type {{.PascalDomainName}}Handler interface {
+	Get{{.PascalDomainName}}List(c *fiber.Ctx) error
+}
+
+type {{.LowerDomainName}}HandlerImpl struct {
+	{{.LowerDomainName}}Service service.{{.PascalDomainName}}Service
+}
+
+var _ {{.PascalDomainName}}Handler = (*{{.LowerDomainName}}HandlerImpl)(nil)
+
+
+func New(p service.{{.PascalDomainName}}Service) {{.PascalDomainName}}Handler {
+	return &{{.LowerDomainName}}HandlerImpl{
+		{{.LowerDomainName}}Service: p,
+	}
+}
+
+func (p *{{.LowerDomainName}}HandlerImpl) Get{{.PascalDomainName}}List(c *fiber.Ctx) error {
+	{{.LowerDomainName}}List, _ := p.{{.LowerDomainName}}Service.Query{{.PascalDomainName}}List()
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"status":  "Ok",
+		"message": "Successfully Get All List",
+		"data":    {{.LowerDomainName}}List,
+	})
+}
