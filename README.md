@@ -23,10 +23,10 @@ func main() {
 		Domain: arg,
 		Force:  false, // @Notes This feature is not yet implemented.
 		Dirs: []Dir{
-			Dir{Input: "/templates/domain/entity", Output: filepath.Join(root, arg)},
-			Dir{Input: "/templates/domain/handler", Output: filepath.Join(root, arg)},
-			Dir{Input: "/templates/domain/repository", Output: filepath.Join(root, arg)},
-			Dir{Input: "/templates/domain/service", Output: filepath.Join(root, arg)},
+			Dir{Input: "./templates/domain/entity", Output: filepath.Join(root, arg)},
+			Dir{Input: "./templates/domain/handler", Output: filepath.Join(root, arg)},
+			Dir{Input: "./templates/domain/repository", Output: filepath.Join(root, arg)},
+			Dir{Input: "./templates/domain/service", Output: filepath.Join(root, arg)},
 		},
 		Data: MockTemplateData{
 			ModuleName:       "github.com/nurulakbaral/codegen",
